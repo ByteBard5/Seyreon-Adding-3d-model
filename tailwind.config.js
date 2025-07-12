@@ -14,7 +14,9 @@ export default {
         textGlow: "textGlow 3s ease-in-out infinite",
         fadeIn: "fadeIn 1.2s ease-in-out forwards",
         scalePop: "scalePop 0.4s ease-out forwards",
-        shimmer: "shimmer 8s linear infinite", // ✅ shimmer animation
+        shimmer: "shimmer 8s linear infinite",
+        slideLeft: "slideLeft 60s linear infinite",
+        bounceStar: "bounceStar 0.8s ease-in-out infinite alternate", // ✅ NEW
       },
       keyframes: {
         shine: {
@@ -44,6 +46,19 @@ export default {
           "100%": {
             backgroundPosition: "200% center",
           },
+        },
+        slideLeft: {
+          "0%": {
+            transform: "translateX(0%)",
+          },
+          "100%": {
+            transform: "translateX(-50%)",
+          },
+        },
+        bounceStar: {
+          // ✅ NEW
+          "0%": { transform: "translateY(0)" },
+          "100%": { transform: "translateY(-2px)" },
         },
       },
     },
