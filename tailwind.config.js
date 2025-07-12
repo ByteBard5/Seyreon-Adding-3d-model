@@ -16,7 +16,7 @@ export default {
         scalePop: "scalePop 0.4s ease-out forwards",
         shimmer: "shimmer 8s linear infinite",
         slideLeft: "slideLeft 60s linear infinite",
-        bounceStar: "bounceStar 0.8s ease-in-out infinite alternate", // ✅ NEW
+        bounceStar: "bounceStar 0.8s ease-in-out infinite alternate",
       },
       keyframes: {
         shine: {
@@ -56,7 +56,6 @@ export default {
           },
         },
         bounceStar: {
-          // ✅ NEW
           "0%": { transform: "translateY(0)" },
           "100%": { transform: "translateY(-2px)" },
         },
