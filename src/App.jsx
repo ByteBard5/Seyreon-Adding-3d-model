@@ -1,0 +1,88 @@
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+
+// ✅ CSS
+import "./components/GlowingButton.css";
+
+// Components
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+
+// Pages
+import Home from "./Pages/Home/home";
+import Services from "./Pages/Services/Services";
+import Pricing from "./Pages/Pricing/Pricing";
+import Contact from "./Pages/Contacts/Contact";
+import About from "./Pages/About/About";
+import Blog from "./Pages/Blog/Blog";
+import SingleBlog from "./Pages/Blog/SingleBlog";
+
+// Service Detail Pages
+import AIAssistant from "./Pages/Services/AIAssistant";
+import BusinessAutomation from "./Pages/Services/BusinessAutomation";
+import GrowthEngines from "./Pages/Services/GrowthEngines";
+import CustomSystems from "./Pages/Services/CustomSystems";
+
+// Legal Pages
+import WhyUs from "./Pages/Legal/WhyUs";
+import PrivacyPolicy from "./Pages/Legal/PrivacyPolicy";
+import TermsAndConditions from "./Pages/Legal/TermsAndConditions";
+
+// ✅ Custom Wrapper to Access Route Info
+const AppWrapper = () => {
+  const location = useLocation();
+  const [showHeaderFooter, setShowHeaderFooter] = useState(true);
+
+  useEffect(() => {
+    // ✅ Always show header/footer on all routes
+    setShowHeaderFooter(true);
+  }, [location.pathname]);
+
+  return (
+    <div className="min-h-screen text-white overflow-x-hidden bg-[#0e0e0e] relative">
+      {showHeaderFooter && <Header />}
+
+      <div className={showHeaderFooter ? "pt-20" : ""}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/services/ai-assistant" element={<AIAssistant />} />
+          <Route
+            path="/services/business-automation"
+            element={<BusinessAutomation />}
+          />
+          <Route path="/services/growth-engines" element={<GrowthEngines />} />
+          <Route path="/services/custom-systems" element={<CustomSystems />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<SingleBlog />} />
+          <Route path="/why-us" element={<WhyUs />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route
+            path="/terms-and-conditions"
+            element={<TermsAndConditions />}
+          />
+        </Routes>
+      </div>
+
+      {showHeaderFooter && <Footer />}
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <Router>
+      <AppWrapper />
+    </Router>
+  );
+};
+
+export default App;
