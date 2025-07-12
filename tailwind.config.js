@@ -17,6 +17,9 @@ export default {
         shimmer: "shimmer 8s linear infinite",
         slideLeft: "slideLeft 60s linear infinite",
         bounceStar: "bounceStar 0.8s ease-in-out infinite alternate",
+        scaleIn: "scaleIn 0.5s ease-in-out both",
+        vacuumLeft: "vacuumLeft 1.2s ease-in-out forwards", // ✅ UPDATED
+        dust: "dust 1s ease-out forwards", // ✅ ALREADY GOOD
       },
       keyframes: {
         shine: {
@@ -58,6 +61,18 @@ export default {
         bounceStar: {
           "0%": { transform: "translateY(0)" },
           "100%": { transform: "translateY(-2px)" },
+        },
+        scaleIn: {
+          "0%": { opacity: 0, transform: "scale(0.95)" },
+          "100%": { opacity: 1, transform: "scale(1)" },
+        },
+        vacuumLeft: {
+          "0%": { transform: "translateX(0)", opacity: 1 },
+          "100%": { transform: "translateX(-120%) scale(0.9)", opacity: 0 },
+        },
+        dust: {
+          "0%": { transform: "translateY(0px)", opacity: 1 },
+          "100%": { transform: "translateY(20px)", opacity: 0 },
         },
       },
     },
