@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { CheckCircle } from "lucide-react";
 import clsx from "clsx";
 
@@ -9,6 +9,21 @@ const Newsletter = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState(null);
   const [animating, setAnimating] = useState(false);
+  const [dustActive, setDustActive] = useState(false);
+  const [buttonX, setButtonX] = useState(0);
+  const [buttonFade, setButtonFade] = useState(false);
+
+  const formRef = useRef(null);
+  const buttonRef = useRef(null);
+
+  useEffect(() => {
+    if (animating && buttonRef.current && formRef.current) {
+      const formWidth = formRef.current.offsetWidth;
+      setButtonX(-formWidth + 60);
+    } else {
+      setButtonX(0);
+    }
+  }, [animating]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +34,14 @@ const Newsletter = () => {
     }
 
     setAnimating(true);
+    setDustActive(true);
 
+    // Step 1: Slide and emit dust
+    setTimeout(() => {
+      setButtonFade(true); // Step 2: Fade button
+    }, 1600);
+
+    // Step 3: Submit form + reset
     setTimeout(async () => {
       const formData = new FormData();
       formData.append("email", email);
@@ -31,7 +53,6 @@ const Newsletter = () => {
         });
 
         const result = await response.json();
-
         if (result.status === "success") {
           setStatus("success");
           setEmail("");
@@ -44,7 +65,10 @@ const Newsletter = () => {
       }
 
       setAnimating(false);
-    }, 1800);
+      setDustActive(false);
+      setButtonFade(false);
+      setButtonX(0);
+    }, 3000);
   };
 
   return (
@@ -57,13 +81,14 @@ const Newsletter = () => {
           We don’t spam. We don’t sell your data. Just pure automation goodness.
         </p>
 
-        <div className="relative h-[58px] w-full sm:w-auto max-w-xl mx-auto">
+        <div className="w-full max-w-xl mx-auto min-h-[60px]">
           {!status && (
             <form
               onSubmit={handleSubmit}
-              className="relative flex items-center w-full transition-all duration-700"
+              ref={formRef}
+              className="w-full flex items-center gap-2"
             >
-              {/* Input Field */}
+              {/* Input */}
               <input
                 type="email"
                 value={email}
@@ -72,43 +97,52 @@ const Newsletter = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 className={clsx(
-                  "px-6 py-3 flex-1 rounded-full bg-white/10 text-white placeholder:text-gray-400 outline-none backdrop-blur-md transition-all duration-500",
-                  animating ? "opacity-0 scale-95 blur-sm" : "opacity-100"
+                  "px-6 py-3 w-full rounded-full bg-white/10 text-white placeholder:text-gray-400 outline-none backdrop-blur-md transition-all duration-500",
+                  animating && "opacity-0 scale-95 blur-sm"
                 )}
               />
 
               {/* Button */}
-              <button
-                type="submit"
-                disabled={animating}
+              <div
+                ref={buttonRef}
+                style={{ transform: `translateX(${buttonX}px)` }}
                 className={clsx(
-                  "absolute right-0 z-10 px-8 py-3 rounded-full text-white font-medium bg-gradient-to-r from-purple-600 to-indigo-600 shadow-md transition-all duration-300",
-                  animating && "animate-vacuum-left"
+                  "transition-transform duration-[1600ms] ease-in-out z-20 relative",
+                  buttonFade &&
+                    "opacity-0 scale-90 transition-opacity duration-1000"
                 )}
               >
-                Subscribe
-              </button>
+                <button
+                  type="submit"
+                  disabled={animating}
+                  className="px-8 py-3 rounded-full text-white font-medium bg-gradient-to-r from-purple-600 to-indigo-600 shadow-lg relative z-30"
+                >
+                  Subscribe
+                </button>
 
-              {/* Pixel Dust */}
-              {animating && (
-                <div className="absolute left-0 w-full h-full pointer-events-none overflow-hidden z-0">
-                  {Array.from({ length: 12 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-1 h-1 bg-purple-400 opacity-70 absolute rounded-full animate-dust"
-                      style={{
-                        top: `${Math.random() * 100}%`,
-                        left: `${20 + Math.random() * 40}%`,
-                        animationDelay: `${i * 0.1}s`,
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
+                {/* Dust Trail */}
+                {dustActive && (
+                  <div className="absolute inset-0 z-10 pointer-events-none">
+                    {Array.from({ length: 16 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-[6px] h-[6px] absolute rounded-full animate-dustTrail mix-blend-screen"
+                        style={{
+                          backgroundColor: `hsl(${
+                            200 + Math.random() * 120
+                          }, 100%, 75%)`,
+                          top: `${Math.random() * 24 - 12}px`,
+                          left: `${Math.random() * 40 - 20}px`,
+                          animationDelay: `${i * 0.06}s`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             </form>
           )}
 
-          {/* Success message */}
           {status === "success" && (
             <div className="flex justify-center items-center gap-2 mt-6 animate-fadeIn">
               <CheckCircle className="w-6 h-6 text-green-400" />
@@ -118,12 +152,12 @@ const Newsletter = () => {
             </div>
           )}
 
-          {/* Fallback messages */}
           {status === "error" && (
             <p className="text-red-400 mt-4 animate-fadeIn">
               Something went wrong. Please try again.
             </p>
           )}
+
           {status === "invalid" && (
             <p className="text-yellow-400 mt-4 animate-fadeIn">
               Please enter a valid email address.

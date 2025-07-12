@@ -18,8 +18,9 @@ export default {
         slideLeft: "slideLeft 60s linear infinite",
         bounceStar: "bounceStar 0.8s ease-in-out infinite alternate",
         scaleIn: "scaleIn 0.5s ease-in-out both",
-        vacuumLeft: "vacuumLeft 1.2s ease-in-out forwards", // ✅ UPDATED
-        dust: "dust 1s ease-out forwards", // ✅ ALREADY GOOD
+        vacuumLeft: "vacuumLeft 1.2s ease-in-out forwards",
+        dust: "dust 1s ease-out forwards",
+        dustTrail: "dustTrail 1.2s ease-out forwards", // ✅ New animation
       },
       keyframes: {
         shine: {
@@ -51,12 +52,8 @@ export default {
           },
         },
         slideLeft: {
-          "0%": {
-            transform: "translateX(0%)",
-          },
-          "100%": {
-            transform: "translateX(-50%)",
-          },
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-50%)" },
         },
         bounceStar: {
           "0%": { transform: "translateY(0)" },
@@ -71,9 +68,29 @@ export default {
           "100%": { transform: "translateX(-120%) scale(0.9)", opacity: 0 },
         },
         dust: {
-          "0%": { transform: "translateY(0px)", opacity: 1 },
-          "100%": { transform: "translateY(20px)", opacity: 0 },
+          "0%": { transform: "translateY(0) scale(1)", opacity: 1 },
+          "100%": { transform: "translateY(-20px) scale(0.6)", opacity: 0 },
         },
+        dustTrail: {
+          "0%": {
+            transform: "translateX(0) translateY(0) scale(1)",
+            opacity: 1,
+          },
+          "100%": {
+            transform: "translateX(-60px) translateY(-20px) scale(0.6)",
+            opacity: 0,
+          },
+        },
+      },
+      zIndex: {
+        "-1": "-1",
+        0: "0",
+        10: "10",
+        20: "20",
+        30: "30",
+        40: "40",
+        50: "50",
+        auto: "auto",
       },
     },
   },
