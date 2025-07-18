@@ -216,9 +216,10 @@ const Pricing = () => {
     <div className="relative min-h-screen bg-gradient-to-br from-[#0d0d14] via-[#13131d] to-[#1b1b29] text-white -mt-[100px] px-4 overflow-x-hidden">
       {/* Hero Section */}
       <section className="relative text-center max-w-4xl mx-auto h-[calc(100vh+100px)] pt-[100px] flex flex-col justify-center items-center">
-        <div className="absolute top-[-20%] left-[-30%] w-[80%] h-[160%] bg-gradient-to-tr from-purple-700 via-indigo-800 to-transparent blur-3xl opacity-40 animate-pulse"></div>
-        <div className="absolute bottom-[-20%] right-[-20%] w-[80%] h-[120%] bg-gradient-to-br from-cyan-500 via-purple-700 to-transparent blur-2xl opacity-30 animate-pulse"></div>
-
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="absolute top-[-20%] left-[-30%] w-[80%] h-[160%] bg-gradient-to-tr from-purple-700 via-indigo-800 to-transparent blur-3xl opacity-40 animate-pulse"></div>
+          <div className="absolute bottom-[-20%] right-[-20%] w-[80%] h-[120%] bg-gradient-to-br from-cyan-500 via-purple-700 to-transparent blur-2xl opacity-30 animate-pulse"></div>
+        </div>
         <h1 className="text-4xl md:text-6xl font-bold z-10 relative mb-4">
           Plans That Scale With You
         </h1>

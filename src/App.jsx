@@ -33,7 +33,18 @@ import WhyUs from "./Pages/Legal/WhyUs";
 import PrivacyPolicy from "./Pages/Legal/PrivacyPolicy";
 import TermsAndConditions from "./Pages/Legal/TermsAndConditions";
 
-// ✅ Custom Wrapper to Access Route Info
+// ✅ ScrollToTop Component (inline version)
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
+// ✅ AppWrapper Component
 const AppWrapper = () => {
   const location = useLocation();
   const [showHeaderFooter, setShowHeaderFooter] = useState(true);
@@ -45,8 +56,8 @@ const AppWrapper = () => {
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden bg-[#0e0e0e] relative">
+      <ScrollToTop /> {/* ✅ Scroll to top on route change */}
       {showHeaderFooter && <Header />}
-
       <div className={showHeaderFooter ? "pt-20" : ""}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -71,12 +82,12 @@ const AppWrapper = () => {
           />
         </Routes>
       </div>
-
       {showHeaderFooter && <Footer />}
     </div>
   );
 };
 
+// ✅ Main App Component
 const App = () => {
   return (
     <Router>
