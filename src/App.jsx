@@ -6,6 +6,9 @@ import {
   useLocation,
 } from "react-router-dom";
 
+// ✅ Custom Hook for Smooth Scroll
+import { useLenis } from "./hooks/useLenis";
+
 // ✅ CSS
 import "./components/GlowingButton.css";
 
@@ -48,6 +51,9 @@ const ScrollToTop = () => {
 const AppWrapper = () => {
   const location = useLocation();
   const [showHeaderFooter, setShowHeaderFooter] = useState(true);
+
+  // ✅ Activate Lenis scroll
+  useLenis();
 
   useEffect(() => {
     // ✅ Always show header/footer on all routes

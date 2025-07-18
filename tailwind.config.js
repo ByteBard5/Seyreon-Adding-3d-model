@@ -20,7 +20,7 @@ export default {
         scaleIn: "scaleIn 0.5s ease-in-out both",
         vacuumLeft: "vacuumLeft 1.2s ease-in-out forwards",
         dust: "dust 1s ease-out forwards",
-        dustTrail: "dustTrail 1.2s ease-out forwards", // ✅ New animation
+        dustTrail: "dustTrail 1.2s ease-out forwards",
       },
       keyframes: {
         shine: {

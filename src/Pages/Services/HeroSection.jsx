@@ -10,7 +10,7 @@ const HeroSection = () => {
       </div>
       <div className="relative z-10 max-w-4xl">
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-          Everything Seyreon Automates
+          Powering Bold Ideas with Strategic Technology
         </h1>
         <p className="text-lg md:text-xl text-gray-300 font-medium">
           We build intelligent automation systems that grow your business, save
