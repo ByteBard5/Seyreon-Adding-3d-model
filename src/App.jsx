@@ -36,7 +36,11 @@ import WhyUs from "./Pages/Legal/WhyUs";
 import PrivacyPolicy from "./Pages/Legal/PrivacyPolicy";
 import TermsAndConditions from "./Pages/Legal/TermsAndConditions";
 
-// ✅ ScrollToTop Component (inline version)
+// ✅ Client Portal Page
+import LoginPage from "./Pages/ClientPortal/LoginPage/index.jsx";
+import DashboardPage from "./Pages/ClientPortal/DashboardPage/index.jsx";
+
+// ✅ ScrollToTop Component
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -62,7 +66,7 @@ const AppWrapper = () => {
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden bg-[#0e0e0e] relative">
-      <ScrollToTop /> {/* ✅ Scroll to top on route change */}
+      <ScrollToTop />
       {showHeaderFooter && <Header />}
       <div className={showHeaderFooter ? "pt-20" : ""}>
         <Routes>
@@ -86,6 +90,10 @@ const AppWrapper = () => {
             path="/terms-and-conditions"
             element={<TermsAndConditions />}
           />
+
+          {/* ✅ Client Portal Login */}
+          <Route path="/client-portal/login" element={<LoginPage />} />
+          <Route path="/portal/dashboard" element={<DashboardPage />} />
         </Routes>
       </div>
       {showHeaderFooter && <Footer />}

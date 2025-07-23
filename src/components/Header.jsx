@@ -44,8 +44,8 @@ const Header = () => {
 
           {/* CTA */}
           <div className="hidden md:block">
-            <NavLink to="/contact">
-              <button className="glow-button">Get Started</button>
+            <NavLink to="/client-portal/login">
+              <button className="glow-button">Client Portal</button>
             </NavLink>
           </div>
 
@@ -99,8 +99,8 @@ const Header = () => {
               {item.name}
             </NavLink>
           ))}
-          <NavLink to="/contact" onClick={() => setIsOpen(false)}>
-            <button className="glow-button w-full mt-2">Get Started</button>
+          <NavLink to="/client-portal/login" onClick={() => setIsOpen(false)}>
+            <button className="glow-button w-full mt-2">Client Portal</button>
           </NavLink>
         </div>
       )}
