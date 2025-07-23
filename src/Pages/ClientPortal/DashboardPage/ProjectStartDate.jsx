@@ -39,31 +39,13 @@ const ProjectStartDate = ({ date }) => {
               Project Starts On
             </h3>
 
-            {/* Glowing date with shimmer */}
-            <p
-              className="text-4xl font-bold mt-2 bg-clip-text text-transparent"
-              style={{
-                backgroundImage:
-                  "linear-gradient(90deg, #ec4899, #f59e0b, #ef4444)",
-                backgroundSize: "200% auto",
-                animation: "shimmer 2.5s linear infinite",
-              }}
-            >
+            {/* Plain white date */}
+            <p className="text-4xl font-bold mt-2 text-white">
               {formattedDate}
             </p>
           </motion.div>
         </motion.div>
       </div>
-
-      {/* Inline keyframes for shimmer animation */}
-      <style>
-        {`
-          @keyframes shimmer {
-            0% { background-position: 200% center; }
-            100% { background-position: -200% center; }
-          }
-        `}
-      </style>
     </div>
   );
 };

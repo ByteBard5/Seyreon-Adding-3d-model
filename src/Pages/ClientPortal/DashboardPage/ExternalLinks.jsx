@@ -26,7 +26,7 @@ const ExternalLinks = ({ notion, drive }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-[28px] md:text-[34px] font-semibold mb-10 bg-gradient-to-r from-[#5ea2ef] via-[#9b7be2] to-[#bc6ff1] bg-clip-text text-transparent animate-shimmer"
+          className="text-4xl md:text-5xl font-bold mb-10 bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-400 bg-[length:200%_auto] bg-clip-text text-transparent animate-shimmer"
         >
           External Project Links
         </motion.h2>
