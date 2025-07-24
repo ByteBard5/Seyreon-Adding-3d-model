@@ -25,6 +25,12 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const clientData = location.state?.clientData;
 
+  const [noteUpdated, setNoteUpdated] = React.useState(false);
+
+  const handleNoteAdded = () => {
+    setNoteUpdated((prev) => !prev); // Toggle to trigger refresh
+  };
+
   React.useEffect(() => {
     if (!clientData) {
       navigate("/portal");
@@ -50,7 +56,9 @@ const Dashboard = () => {
 
       <Deadline date={normalizedData["deadline"] || ""} />
 
-      <ProjectStatusBadge projectStatus={normalizedData["project status"] || 0} />
+      <ProjectStatusBadge
+        projectStatus={normalizedData["project status"] || 0}
+      />
 
       <PaymentStatusBox
         paymentStatus={normalizedData["payment status"] || ""}
@@ -61,9 +69,15 @@ const Dashboard = () => {
         drive={normalizedData["google drive folder"] || ""}
       />
 
-      <ClientNoteBox clientId={normalizedData["client id"] || ""} />
+      <ClientNoteBox
+        clientId={normalizedData["client id"] || ""}
+        refreshTrigger={noteUpdated}
+      />
 
-      <ClientNoteForm clientId={normalizedData["client id"] || ""} />
+      <ClientNoteForm
+        clientId={normalizedData["client id"] || ""}
+        onNoteAdded={handleNoteAdded}
+      />
     </div>
   );
 };
