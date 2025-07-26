@@ -1,6 +1,6 @@
 //use  to Post and Get the data from google sheet to website for the last 2 sections of Client dashboard, (Showing previous notes, and to new notes using a text block)
 const SHEET_ENDPOINT =
-  "https://script.google.com/macros/s/AKfycbyKerwBVZE2Ge-vF79OZGiyqowLuvYe5d3ww0e1o1ksyd_dsiNpFhpwUowijO0TZw/exec";
+  "https://script.google.com/macros/s/AKfycbzuJMOAC27C2bGxn1UAp14uPeoR_hP_vuPw2kJxXdOR6VJXkHCxcG8mogWidGxDOTxI/exec";
 
 // ✅ Append a new note for a client
 export async function appendClientNote(clientId, noteText) {
