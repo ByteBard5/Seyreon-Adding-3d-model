@@ -1,64 +1,60 @@
-//use  to Post and Get the data from google sheet to website for the last 2 sections of Client dashboard, (Showing previous notes, and to new notes using a text block)
-const SHEET_ENDPOINT =
-  "https://script.google.com/macros/s/AKfycbzuJMOAC27C2bGxn1UAp14uPeoR_hP_vuPw2kJxXdOR6VJXkHCxcG8mogWidGxDOTxI/exec";
-
-// ✅ Append a new note for a client
-export async function appendClientNote(clientId, noteText) {
-  try {
-    const response = await fetch(SHEET_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        clientId: clientId,
-        note: noteText,
-      }),
-    });
-
-    console.log("🟡 Response OK?", response.ok); // <- log this
-    console.log("🟡 Response status:", response.status); // <- and this
-
-    const rawText = await response.text();
-    console.log("🟡 Raw response text:", rawText); // <- and this
-
-    let result;
-    try {
-      result = JSON.parse(rawText);
-    } catch (err) {
-      console.error("❌ Failed to parse JSON:", err);
-      throw new Error("Invalid JSON response.");
-    }
-
-    if (result?.success !== true) {
-      console.error("❌ Failed to append note. Parsed result:", result);
-      throw new Error("Note append failed.");
-    }
-
-    return true;
-  } catch (error) {
-    console.error("❌ Error appending client note:", error);
-    return false;
-  }
-}
+const SHEET_GET_ENDPOINT =
+  "https://script.google.com/macros/s/AKfycbzJNKVRNnkgZuhHwNgVsxeekyR-0auQFEMFS5J3M3C7cW1OvKJPih4WdgjHElG8h0Cs/exec";
 
 // ✅ Fetch existing notes for a client
 export async function fetchClientNotes(clientId) {
   try {
-    const url = `${SHEET_ENDPOINT}?clientId=${encodeURIComponent(
+    const url = `${SHEET_GET_ENDPOINT}?clientId=${encodeURIComponent(
       clientId
-    )}&action=getNotes`;
-
+    )}`;
     const response = await fetch(url);
+
     const result = await response.json();
 
-    if (typeof result.notes !== "string") {
-      throw new Error("Invalid response format from server.");
+    if (result.success !== true || typeof result.notes !== "string") {
+      throw new Error("Invalid response from server.");
     }
 
-    return result.notes.split("\n"); // returns an array
+    // Split notes by newline, then separate timestamp and message
+    return result.notes
+      .split("\n")
+      .filter((line) => line.trim() !== "")
+      .map((entry) => {
+        const match = entry.match(/^\[(.*?)\]\s*(.*)$/);
+        return {
+          timestamp: match ? match[1] : "",
+          message: match ? match[2] : entry,
+        };
+      });
   } catch (error) {
-    console.error("Error fetching client notes:", error);
+    console.error("❌ Error fetching client notes:", error);
     return [];
+  }
+}
+
+// ✅ Append a new note for a client — placeholder for now
+const BACKEND_URL = "http://localhost:5000";
+
+// ✅ Send new note to backend
+export async function appendClientNote(clientId, noteText) {
+  try {
+    const response = await fetch(`${BACKEND_URL}/add-note`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ clientId, note: noteText }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || result.success !== true) {
+      throw new Error(result.error || "Unknown error");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("❌ Error sending note to backend:", error);
+    return false;
   }
 }

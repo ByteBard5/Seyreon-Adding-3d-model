@@ -1,51 +1,61 @@
-//use for showing the Previous Notes to the Client, in the client portal (2nd last section)
 import React, { useEffect, useState } from "react";
 import { fetchClientNotes } from "./clientNotes";
+import { motion } from "framer-motion";
 
-const ClientNoteBox = ({ clientId }) => {
+const ClientNoteBox = ({ clientId, refreshTrigger }) => {
   const [notes, setNotes] = useState([]);
-  const [error, setError] = useState("");
-
-  const loadNotes = async () => {
-    setError("");
-    try {
-      const rawNotes = await fetchClientNotes(clientId);
-
-      // Convert "[2025-07-23 21:46] Some note" → { date: "...", note: "..." }
-      const parsedNotes = rawNotes.filter(Boolean).map((line) => {
-        const match = line.match(/^\[(.*?)\]\s*(.*)$/);
-        if (match) {
-          return { date: match[1], note: match[2] };
-        } else {
-          return { date: "Unknown", note: line };
-        }
-      });
-
-      setNotes(parsedNotes.reverse()); // latest first
-    } catch (err) {
-      console.error("Error fetching notes:", err);
-      setError("Failed to load notes.");
-    }
-  };
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadNotes();
-  }, [clientId]);
+    async function loadNotes() {
+      setLoading(true);
+      const result = await fetchClientNotes(clientId);
+      setNotes(result);
+      setLoading(false);
+    }
+
+    if (clientId) {
+      loadNotes();
+    }
+  }, [clientId, refreshTrigger]);
 
   return (
-    <div className="bg-[#1e1e2f] p-5 rounded-xl shadow-md space-y-4">
-      <h2 className="text-xl font-bold text-white">Client Notes</h2>
-      {error && <p className="text-red-500">{error}</p>}
-      {notes.length === 0 && !error && (
-        <p className="text-gray-400">No notes added yet.</p>
-      )}
-      {notes.map((entry, index) => (
-        <div key={index} className="p-3 rounded-lg bg-[#2c2c3e] text-white">
-          <p className="text-sm text-gray-400 mb-1">{entry.date}</p>
-          <p className="text-base">{entry.note}</p>
-        </div>
-      ))}
-    </div>
+    <section className="bg-[#1b1b29] text-white px-6 pb-20 pt-0 w-full">
+      <div className="max-w-4xl mx-auto text-center">
+        {/* Heading with shimmer */}
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-4xl md:text-5xl font-bold mb-10 bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-400 bg-[length:200%_auto] bg-clip-text text-transparent animate-shimmer"
+        >
+          Your Previous Notes
+        </motion.h2>
+
+        {/* Notes list */}
+        {loading ? (
+          <p className="text-gray-400">Loading notes...</p>
+        ) : notes.length === 0 ? (
+          <p className="text-gray-500 italic">No notes submitted yet.</p>
+        ) : (
+          <ul className="space-y-4 text-left">
+            {notes.map((note, index) => (
+              <li
+                key={index}
+                className="bg-[#2d2d44] rounded-xl p-4 border border-[#444] shadow-sm"
+              >
+                <div className="text-sm text-gray-400 mb-1">
+                  🕒 {note.timestamp}
+                </div>
+                <div className="text-base text-white whitespace-pre-wrap">
+                  {note.message}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
   );
 };
 
