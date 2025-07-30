@@ -4,7 +4,7 @@ import LoginForm from "./LoginForm";
 
 const ClientPortalLoginPage = () => {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="relative text-white pt-0 overflow-hidden bg-gradient-to-br from-[#0d0d14] via-[#13131d] to-[#1b1b29] -mt-[80px]">
       <HeroSection />
       <InfoSection />
       <LoginForm />

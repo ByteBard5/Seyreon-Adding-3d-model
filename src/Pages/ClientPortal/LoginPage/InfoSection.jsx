@@ -1,7 +1,7 @@
 const InfoSection = () => {
   return (
-    <div className="bg-[#1b1b29] text-white px-6 py-20 -mt-8">
-      <section className="max-w-4xl mx-auto text-center">
+    <div className="relative z-20 bg-gradient-to-b from-transparent via-[#1b1b29] to-[#1b1b29] text-white px-6 pb-20 pt-0 -mt-1">
+      <section className="relative z-30 max-w-4xl mx-auto text-center bg-[#1b1b29]/80 backdrop-blur-sm p-6 rounded-xl">
         <h2 className="text-3xl md:text-4xl font-semibold text-white mb-6">
           Your Dedicated Project Hub
         </h2>

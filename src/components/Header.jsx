@@ -21,9 +21,15 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-[#0e0e0e]/60 backdrop-saturate-150 backdrop-blur-md border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <div className="text-white text-2xl font-bold">Seyreon</div>
+          <NavLink to="/" className="flex items-center h-full px-2">
+            <img
+              src="/Full Logo.png"
+              alt="Seyreon Logo"
+              className="h-[60px] w-auto object-contain" // 60px tall logo
+            />
+          </NavLink>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex flex-1 justify-center gap-6 text-white">

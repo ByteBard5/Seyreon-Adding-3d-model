@@ -73,7 +73,7 @@ const Blog = () => {
   return (
     <div className="-mt-[100px] bg-gradient-to-br from-[#0d0d14] via-[#13131d] to-[#1b1b29] min-h-screen text-white">
       {/* HERO SECTION */}
-      <section className="relative h-[calc(100vh+100px)] pt-[100px] flex flex-col justify-center items-center text-center px-6">
+      <section className="relative h-auto lg:h-[calc(100vh+100px)] pt-36 lg:pt-[100px] pb-20 flex flex-col justify-center items-center text-center px-6 overflow-visible">
         <div className="absolute inset-0 z-0">
           <div className="absolute top-[-20%] left-[-30%] w-[80%] h-[160%] bg-gradient-to-tr from-purple-700 via-indigo-800 to-transparent blur-3xl opacity-40 animate-pulse"></div>
           <div className="absolute bottom-[-20%] right-[-20%] w-[80%] h-[120%] bg-gradient-to-br from-cyan-500 via-purple-700 to-transparent blur-2xl opacity-30 animate-pulse"></div>

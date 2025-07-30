@@ -38,7 +38,13 @@ const Footer = () => {
       <div className="px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10 max-w-7xl mx-auto text-sm">
         {/* Logo + Contact Info */}
         <div className="space-y-4">
-          <h3 className="text-2xl font-bold text-white">Seyreon</h3>
+          <Link to="/">
+            <img
+              src="/FooterLogo.png"
+              alt="Seyreon Logo"
+              className="h-[34px] w-auto"
+            />
+          </Link>
           <p className="text-gray-400">Your AI Automation Partner</p>
           <div className="flex items-start space-x-2 text-gray-400">
             <FaMapMarkerAlt className="mt-1" />
