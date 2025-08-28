@@ -106,7 +106,7 @@ const Footer = () => {
           <h4 className="text-white font-semibold mb-3">Connect With Us</h4>
           <div className="flex flex-wrap space-x-4 text-purple-400 text-xl">
             <a
-              href="https://www.linkedin.com/company/roboflowsystem/"
+              href="https://www.linkedin.com/company/seyreon/"
               target="_blank"
               rel="noreferrer"
               className="hover:text-white transition"
@@ -122,7 +122,7 @@ const Footer = () => {
               <FaInstagram />
             </a>
             <a
-              href="https://www.facebook.com/roboflowsystem"
+              href="https://www.facebook.com/seyreon"
               target="_blank"
               rel="noreferrer"
               className="hover:text-white transition"

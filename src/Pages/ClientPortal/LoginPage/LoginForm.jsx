@@ -39,9 +39,8 @@ const LoginForm = () => {
           </h3>
           <p className="text-center text-gray-400 text-sm mb-4">
             Enter your <span className="text-white font-medium">Client ID</span>{" "}
-            and registered{" "}
-            <span className="text-white font-medium">Password</span> (Email or
-            Phone) to access your portal.
+            and <span className="text-white font-medium">Password</span> to
+            access your portal.
           </p>
 
           <input
@@ -55,7 +54,7 @@ const LoginForm = () => {
 
           <input
             type="text"
-            placeholder="Password (Email or Phone)"
+            placeholder="Password"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
             required

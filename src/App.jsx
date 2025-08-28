@@ -15,6 +15,7 @@ import "./components/GlowingButton.css";
 // Components
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import N8nChatWidget from "./components/N8nChatWidget";
 
 // Pages
 import Home from "./Pages/Home/home";
@@ -97,6 +98,9 @@ const AppWrapper = () => {
         </Routes>
       </div>
       {showHeaderFooter && <Footer />}
+
+      {/* ✅ Chat widget always mounted */}
+      <N8nChatWidget />
     </div>
   );
 };
