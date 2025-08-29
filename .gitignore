@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# 🔒 Sensitive files (do not push secrets!)
+.env
+*.env
+service-account.json
+*.key
+*.pem
