@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
 
@@ -9,31 +9,43 @@ const Model = () => {
   const robotRef = useRef();
   const targetEmpty = useRef();
   const rotatingEdges = useRef();
-  const { mouse } = useThree();
+  const mousePosition = useRef(new THREE.Vector2(0, 0));
+  const { size } = useThree();
 
-  // Debug: log object hierarchy once
+  // Debug log once
   useEffect(() => {
     if (gltf?.scene) {
       console.log("GLB Scene Graph:");
-      gltf.scene.traverse((child) => {
-        console.log(child.name);
-      });
-
-      // Assign references based on object names
-      targetEmpty.current = gltf.scene.getObjectByName("Empty"); // 👀 Eye target
-      rotatingEdges.current = gltf.scene.getObjectByName("CubeEdges"); // ⬛ Rotating edges
+      gltf.scene.traverse((child) => console.log(child.name));
+      targetEmpty.current = gltf.scene.getObjectByName("Empty");
+      rotatingEdges.current = gltf.scene.getObjectByName("CubeEdges");
     }
   }, [gltf]);
 
-  // Update loop
-  useFrame(() => {
-    // Eye tracking (smooth follow)
-    if (targetEmpty.current) {
-      const targetPos = new THREE.Vector3(mouse.x * 2, mouse.y * 2, 0);
-      targetEmpty.current.position.lerp(targetPos, 0.1); // smooth follow
-    }
+  // Global mouse listener
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      mousePosition.current.x = (event.clientX / size.width) * 2 - 1;
+      mousePosition.current.y = -(event.clientY / size.height) * 2 + 1;
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [size]);
 
-    // Slow rotation for cube edges
+  // Animations
+  useFrame(() => {
+    if (robotRef.current) {
+      robotRef.current.rotation.y = mousePosition.current.x * 0.5;
+      robotRef.current.rotation.x = -mousePosition.current.y * 0.3;
+    }
+    if (targetEmpty.current) {
+      const targetPos = new THREE.Vector3(
+        mousePosition.current.x * 2,
+        mousePosition.current.y * 2,
+        0
+      );
+      targetEmpty.current.position.lerp(targetPos, 0.1);
+    }
     if (rotatingEdges.current) {
       rotatingEdges.current.rotation.y += 0.003;
       rotatingEdges.current.rotation.x += 0.002;
@@ -44,9 +56,8 @@ const Model = () => {
     <primitive
       ref={robotRef}
       object={gltf.scene}
-      scale={1.0}
+      scale={1.3} // ✅ increased size
       position={[0, -0.2, 0]}
-      rotation={[0, 0, 0]} // facing forward
     />
   );
 };
@@ -55,18 +66,29 @@ const ModelCanvas = () => {
   return (
     <Canvas
       camera={{ position: [0, 0, 5], fov: 45 }}
-      style={{ height: "100%", width: "100%" }}
+      gl={{ alpha: true }}
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "transparent",
+        pointerEvents: "none",
+        zIndex: 0, // ✅ behind text & buttons
+        mixBlendMode: "lighten", // ✅ blend with gradient
+      }}
     >
       {/* Lights */}
       <ambientLight intensity={0.9} />
       <directionalLight position={[5, 5, 5]} intensity={1.2} />
 
-      {/* 3D Model */}
+      {/* Model */}
       <Suspense fallback={null}>
         <Model />
       </Suspense>
 
-      {/* Bloom glow */}
+      {/* Glow */}
       <EffectComposer>
         <Bloom
           intensity={1.5}
@@ -74,9 +96,6 @@ const ModelCanvas = () => {
           luminanceSmoothing={0.9}
         />
       </EffectComposer>
-
-      {/* Controls */}
-      <OrbitControls enableZoom={false} enablePan={false} />
     </Canvas>
   );
 };
