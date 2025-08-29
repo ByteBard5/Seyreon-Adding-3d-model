@@ -32,13 +32,10 @@ export async function fetchClientNotes(clientId) {
   }
 }
 
-// ✅ Append a new note for a client — placeholder for now
-const BACKEND_URL = "http://localhost:5000";
-
 // ✅ Send new note to backend
 export async function appendClientNote(clientId, noteText) {
   try {
-    const response = await fetch(`${BACKEND_URL}/add-note`, {
+    const response = await fetch(`/add-note`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

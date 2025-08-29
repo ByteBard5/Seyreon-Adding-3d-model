@@ -1,13 +1,83 @@
 const express = require("express");
 const cors = require("cors");
+const nodemailer = require("nodemailer");
+require("dotenv").config();
 const { google } = require("googleapis");
+
+console.log("📂 Loaded EMAIL_USER:", process.env.EMAIL_USER); // 👈 Debug log
+console.log("📂 Loaded GOOGLE_PROJECT_ID:", process.env.GOOGLE_PROJECT_ID); //Added for .env
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ✅ Debugging middleware – log every incoming request
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
+// ✅ Health check
+app.get("/test", (req, res) => {
+  res.json({ success: true, message: "Backend is working!" });
+});
+
+// ------------------ CONTACT FORM ------------------
+app.post("/send-email", async (req, res) => {
+  console.log("📩 Incoming POST /send-email with body:", req.body);
+
+  const { name, email, phone, helpType, customHelp, budget, message } =
+    req.body;
+
+  const finalHelp =
+    helpType === "Other (Type Below)" && customHelp
+      ? `Other - ${customHelp}`
+      : helpType;
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: process.env.EMAIL_USER,
+    subject: `New Contact Form Submission from ${name}`,
+    text: `
+You received a new inquiry from your website:
+
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Help Needed With: ${finalHelp}
+Estimated Budget: ${budget}
+
+Additional Message:
+${message || "(No additional message)"}
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("✅ Email sent successfully!");
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("❌ Email sending failed:", error);
+    return res.status(500).json({ success: false, error: "Email failed" });
+  }
+});
+
+// ------------------ CLIENT NOTES ------------------
 const auth = new google.auth.GoogleAuth({
-  keyFile: "service-account.json",
+  credentials: {
+    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+    private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+  },
+  projectId: process.env.GOOGLE_PROJECT_ID,
+  //keyFile: "service-account.json",
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
@@ -28,7 +98,12 @@ function getFormattedTimestamp() {
   })}]`;
 }
 
+console.log(">>> Registering POST /add-note route");
+
 app.post("/add-note", async (req, res) => {
+  console.log("🔥 Received request at /add-note");
+  console.log("📩 Request body:", req.body);
+
   try {
     const { clientId, note } = req.body;
 
@@ -60,7 +135,7 @@ app.post("/add-note", async (req, res) => {
         (rows[i][clientIdIndex] || "").trim().toLowerCase() ===
         clientId.trim().toLowerCase()
       ) {
-        rowToUpdate = i + 1; // 1-based row index for Google Sheets
+        rowToUpdate = i + 1;
         break;
       }
     }
@@ -103,6 +178,7 @@ app.post("/add-note", async (req, res) => {
       },
     });
 
+    console.log("✅ Note successfully added to sheet");
     return res.json({ success: true, message: "Note added" });
   } catch (err) {
     console.error("❌ Error in /add-note:", err.message);
@@ -110,6 +186,10 @@ app.post("/add-note", async (req, res) => {
   }
 });
 
+// ------------------ START SERVER ------------------
 app.listen(5000, () => {
   console.log("🚀 Server running at http://localhost:5000");
+  console.log(
+    "📌 Available routes: GET /test, POST /send-email, POST /add-note"
+  );
 });
